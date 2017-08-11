@@ -1,6 +1,6 @@
 target
 */src/generated
-mondrian.*properties
+#mondrian.*properties
 *.ipr
 *.iws
 *.iml

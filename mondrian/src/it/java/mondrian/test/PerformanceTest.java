@@ -623,6 +623,21 @@ public class PerformanceTest extends FoodMartTestCase {
         assertEquals(4, CounterUdf.count.get());
     }
 
+    // It takes ~10kkk seconds on i5-4570 windows 10 x64
+    public void testMondrian2575() {
+        final long startTime = System.currentTimeMillis();
+        assertQueryReturns(
+                "with\n" +
+                        "member [Customers].[AggregateMembers1] AS Aggregate({[Customers].Members})\n" +
+                        "member [Gender].[AggregateMembers2] AS Aggregate([Product].members * [Store].Members)\n" +
+                        "select CROSSJOIN([Customers].[AggregateMembers1], [Gender].[AggregateMembers2]) on COLUMNS,\n" +
+                        "[Store].[Store Name].members on ROWS\n" +
+                        "from [Sales]",
+                "");
+        final long finishTime = System.currentTimeMillis();
+        System.out.println( "It takes " + (finishTime - startTime) + " millis" );
+    }
+
     /**
      * Tests performance of
      * {@link mondrian.olap.fun.FunUtil#stablePartialSort}.
